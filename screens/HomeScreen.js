@@ -13,41 +13,71 @@ import {
   ScrollView,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 const allCoffees = [
   {
-    id: '1',
-    name: 'Caffe Mocha',
-    type: 'Macchiato',
-    price: 4.53,
-    image: require('../assets/mocha.jpg'),
-    tags: ['Caliente', 'Café'],
-  },
+  id: '1',
+  name: 'Caffe Mocha',
+  type: 'Macchiato',
+  image: require('../assets/mocha.jpg'),
+  description: 'A delicious blend of espresso, chocolate, and milk.',
+  tags: ['Caliente', 'Café'],
+  hasSize: true,
+  icons: ['delivery', 'milk', 'coffee'],
+  price: {
+    S: 3.50,
+    M: 4.50,
+    L: 5.20
+  }
+},
+
   {
     id: '2',
     name: 'Flat White',
     type: 'Latte',
-    price: 3.53,
     image: require('../assets/flatwhite.jpg'),
+    description: 'Smooth Flat White made with rich espresso and velvety milk.',
     tags: ['Caliente', 'Café'],
+    hasSize: true,
+  icons: ['delivery', 'milk', 'coffee'],
+  price: {
+    S: 3.53,
+    M: 4.60,
+    L: 5.30
+  }
   },
   {
     id: '3',
     name: 'Matcha Latte',
     type: 'Americano',
-    price: 4.00,
     image: require('../assets/matcha.jpg'),
+    description: 'Refreshing Matcha Latte with premium green tea and milk.',
     tags: ['Frío', 'Mate'],
+    hasSize: true,
+  icons: ['delivery', 'milk', 'coffee'],
+  price: {
+    S: 4.00,
+    M: 5.45,
+    L: 6.50
+  }
   },
-  {
-    id: '4',
-    name: 'Brownie',
-    type: 'Postres',
-    price: 2.50,
-    image: require('../assets/brownie.jpg'),
-    tags: ['Postres'],
-  },
+   {
+  id: '4',
+  name: 'Brownie',
+  type: 'Postre',
+  price: {
+  M: 2.50
+},
+  image: require('../assets/brownie.jpg'),
+  description: 'Delicious chocolate brownie perfect for your coffee break.',
+  tags: ['Postres'],
+  hasSize: false,
+  icons: ['delivery'],
+},
+    
 ];
 
 const sedes = ['Surco, Lima', 'Miraflores, Lima', 'Barranco, Lima'];
@@ -55,6 +85,7 @@ const filtrosDisponibles = ['Frío', 'Caliente', 'Café', 'Mate', 'Postres'];
 const categorias = ['All Coffee', 'Macchiato', 'Latte', 'Americano'];
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   const [search, setSearch] = useState('');
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [sede, setSede] = useState(sedes[0]);
@@ -62,6 +93,8 @@ export default function HomeScreen() {
   const [sedeModalVisible, setSedeModalVisible] = useState(false);
   const [activeCategory, setActiveCategory] = useState('All Coffee');
 
+
+  
   const toggleFilter = (tag) => {
     setSelectedFilters((prev) =>
       prev.includes(tag) ? prev.filter((t) => t !== tag) : [...prev, tag]
@@ -117,27 +150,33 @@ export default function HomeScreen() {
       </ImageBackground>
 
       {/* Filtros de categoría */} 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterRow}>
-        {categorias.map((cat) => (
-          <TouchableOpacity
-            key={cat}
-            onPress={() => setActiveCategory(cat)}
-            style={[
-              styles.filterPill,
-              activeCategory === cat && styles.filterPillActive,
-            ]}
-          >
-            <Text
-              style={[
-                styles.filterPillText,
-                activeCategory === cat && styles.filterPillTextActive,
-              ]}
-            >
-              {cat}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
+<ScrollView
+  horizontal
+  showsHorizontalScrollIndicator={false}
+  style={styles.filterRow}
+  contentContainerStyle={{ paddingVertical: 0 }}
+>
+  {categorias.map((cat) => (
+    <TouchableOpacity
+      key={cat}
+      onPress={() => setActiveCategory(cat)}
+      style={[
+        styles.filterPill,
+        activeCategory === cat && styles.filterPillActive,
+      ]}
+    >
+      <Text
+        style={[
+          styles.filterPillText,
+          activeCategory === cat && styles.filterPillTextActive,
+        ]}
+      >
+        {cat}
+      </Text>
+    </TouchableOpacity>
+  ))}
+</ScrollView>
+
 
       {/* Lista de productos */}
       <FlatList
@@ -148,24 +187,27 @@ export default function HomeScreen() {
     justifyContent: 'space-between',
     paddingHorizontal: 16,
   }}
-  style={{ flex: 1 }}
+  style={{
+    flex: 1,
+    marginTop: 0,
+  }}
   contentContainerStyle={{
     paddingTop: 0,
     paddingBottom: 20,
-    flexGrow: 1,
   }}
+  ListHeaderComponent={() => null}
   ListEmptyComponent={
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text style={{ color: '#aaa' }}>No hay productos disponibles</Text>
     </View>
   }
-  ListFooterComponent={<View style={{ height: 100 }} />} // 👈 asegura espacio final
+  ListFooterComponent={<View style={{ height: 100 }} />}
   renderItem={({ item }) => (
     <View style={styles.card}>
       <TouchableOpacity
         activeOpacity={0.8}
         onPress={() => {
-          // navegación a detalle
+          navigation.navigate('Detail', { coffee: item });
         }}
       >
         <Image source={item.image} style={styles.cardImage} />
@@ -174,11 +216,17 @@ export default function HomeScreen() {
       </TouchableOpacity>
 
       <View style={styles.cardFooter}>
-        <Text style={styles.price}>${item.price.toFixed(2)}</Text>
+        <Text style={styles.price}>
+          $
+          {typeof item.price === 'number'
+            ? item.price.toFixed(2)
+            : (item.price.M ?? 0).toFixed(2)}
+        </Text>
+
         <TouchableOpacity
           style={styles.addButton}
           onPress={() => {
-            // lógica agregar al carrito
+            navigation.navigate('Detail', { coffee: item });
           }}
         >
           <Text style={styles.addText}>+</Text>
@@ -278,10 +326,12 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   filterRow: {
-    marginTop: 16,
-    marginBottom: 5, //  esto deberia quitar el espacio
-    paddingHorizontal: 16,
-  },  
+  marginTop: 16,
+  marginBottom: 0,
+  paddingHorizontal: 16,
+  paddingVertical: 0,
+},
+
   filterPill: {
     paddingHorizontal: 14,
     paddingVertical: 8,

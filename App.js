@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
+import FavoritesScreen from './screens/FavoritesScreen';
 import OnboardingScreen from './screens/OnboardingScreen';
 import HomeScreen from './screens/HomeScreen';
 import OrderScreen from './screens/OrderScreen';
@@ -18,12 +19,13 @@ function MainTabs() {
       screenOptions={({ route }) => ({
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarIcon: ({ color, size, focused }) => {
+        tabBarIcon: ({ color, focused }) => {
           let iconName;
 
           if (route.name === 'Home') iconName = focused ? 'home' : 'home-outline';
           if (route.name === 'Order') iconName = focused ? 'cart' : 'cart-outline';
           if (route.name === 'Delivery') iconName = focused ? 'map' : 'map-outline';
+          if (route.name === 'Favorites') iconName = focused ? 'heart' : 'heart-outline';
 
           return <Ionicons name={iconName} size={24} color={color} />;
         },
@@ -34,6 +36,7 @@ function MainTabs() {
       <Tab.Screen name="Home" component={HomeScreen} />
       <Tab.Screen name="Order" component={OrderScreen} />
       <Tab.Screen name="Delivery" component={DeliveryScreen} />
+      <Tab.Screen name="Favorites" component={FavoritesScreen} />
     </Tab.Navigator>
   );
 }

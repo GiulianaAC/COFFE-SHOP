@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, FlatList, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useFavorites } from './FavoritesContext'; // IMPORTA el hook
+import { useFavorites } from '../context/FavoritesContext'; // IMPORTA el hook
 
 export default function FavoritesScreen({ navigation }) {
   const { favorites, removeFavorite, isFavorite } = useFavorites();

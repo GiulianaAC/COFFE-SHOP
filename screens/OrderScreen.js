@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, Modal, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useCart } from './CartContext';
+import { useCart } from '../context/CartContext';
 
 const sedes = ['Surco, Lima', 'Miraflores, Lima', 'Barranco, Lima'];
 

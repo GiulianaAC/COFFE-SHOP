@@ -1,11 +1,12 @@
+import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 
 // IMPORTA tu Context
-import { FavoritesProvider } from './screens/FavoritesContext';
-import { CartProvider } from './screens/CartContext';
+import { FavoritesProvider } from './context/FavoritesContext';
+import { CartProvider } from './context/CartContext';
 
 // IMPORTA las pantallas
 import FavoritesScreen from './screens/FavoritesScreen';

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
-import { useFavorites } from './FavoritesContext'; // OJO: Solo usamos el hook
+import { useFavorites } from '../context/FavoritesContext'; // OJO: Solo usamos el hook
 
 export default function DetailScreen({ route, navigation }) {
   const [size, setSize] = useState('M');

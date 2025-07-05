@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { useCart } from './CartContext';
+
 
 
 
@@ -86,6 +88,7 @@ const categorias = ['All Coffee', 'Macchiato', 'Latte', 'Americano'];
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { addToCart } = useCart();
   const [search, setSearch] = useState('');
   const [selectedFilters, setSelectedFilters] = useState([]);
   const [sede, setSede] = useState(sedes[0]);
@@ -224,13 +227,15 @@ export default function HomeScreen() {
         </Text>
 
         <TouchableOpacity
-          style={styles.addButton}
-          onPress={() => {
-            navigation.navigate('Detail', { coffee: item });
-          }}
-        >
-          <Text style={styles.addText}>+</Text>
-        </TouchableOpacity>
+  style={styles.addButton}
+  onPress={() => {
+    const defaultSize = item.price?.M ? 'M' : Object.keys(item.price)[0];
+    addToCart(item, defaultSize);
+  }}
+>
+  <Text style={styles.addText}>+</Text>
+</TouchableOpacity>
+
       </View>
     </View>
   )}
@@ -327,7 +332,7 @@ const styles = StyleSheet.create({
   },
   filterRow: {
   marginTop: 16,
-  marginBottom: 0,
+  marginBottom: -400,
   paddingHorizontal: 16,
   paddingVertical: 0,
 },

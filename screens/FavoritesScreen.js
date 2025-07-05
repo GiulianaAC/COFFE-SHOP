@@ -64,7 +64,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f8f8f8',
     borderRadius: 10,
     padding: 10,
-    marginBottom: 12,
+    marginTop: 20,
+    
   },
   imageWrapper: {
     width: 60,
